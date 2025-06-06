@@ -1,7 +1,7 @@
 ---
 -   name: Iterate over previously loaded user dictionary and create with password
     ansible.builtin.user:
-        name: "{{ item.name }}"
+        name: "{{ item }}"
         uid: "{{ item.uid }}"
         home: "{{ (homePath, item.name) | path_join }}"
         create_home: false

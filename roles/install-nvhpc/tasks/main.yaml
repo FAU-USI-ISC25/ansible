@@ -7,11 +7,11 @@
     ansible.builtin.set_fact:
         nvhpc_folder: "nvhpc_{{ nvhpc_version_array[0] }}_{{ nvhpc_version_array[1] }}_Linux_{{ isa }}_cuda_{{ nvhpc_version_array[2] }}"
 
--   name: download and and unarchive
-    ansible.builtin.unarchive:
-        src: "https://developer.download.nvidia.com/hpc-sdk/{{ nvhpc_version_array[1][:2] }}.{{ nvhpc_version_array[1][2] }}/{{ nvhpc_folder }}.tar.gz"
-        dest: "{{ installerTmpFolder }}"
-        remote_src: yes
+#-   name: download and and unarchive
+#    ansible.builtin.unarchive:
+#        src: "https://developer.download.nvidia.com/hpc-sdk/{{ nvhpc_version_array[1][:2] }}.{{ nvhpc_version_array[1][2] }}/{{ nvhpc_folder }}.tar.gz"
+#        dest: "{{ installerTmpFolder }}"
+#        remote_src: yes
 
 -   name: install
     ansible.builtin.shell:

@@ -14,7 +14,6 @@ role cuda-modulefile
 
 brauchen
 modules:
-nvhpc
 intel_llm
 
 dnf install on all nodes:
@@ -28,7 +27,7 @@ autoconf
 automake
 
 
-prepend "nokaslr iommu=pt nvme-core.multipath=N rd.driver.blacklist=nouveau selinux=0 msr.allow_writes=on " to GRUB_CMD_LINUX in /etc/defaults/grub
+    prepend "nokaslr iommu=pt nvme-core.multipath=N rd.driver.blacklist=nouveau selinux=0 msr.allow_writes=on " to GRUB_CMD_LINUX in /etc/defaults/grub
 and update grub by runnig grub2-mkconfig --update-bls-cmdline -o /boot/grub2/grub.cfg
 
 run modprob nvidia-peermem

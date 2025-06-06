@@ -1,9 +1,25 @@
 ---
 -   name: download Offline installer
     ansible.builtin.get_url:
-        url: "{{ link }}"
-        dest: oneMKL-installer.sh
+        url: "{{ oneMKL_download_link }}"
+        dest: "{{ installerTmpFolder }}"
         mode: '0700'
 
--   name: run installer
+-   name: get installer name from URL usin regex
+    ansible.builtin.set_fact:
+        installer_name: "{{ oneMKL_download_link | regex_search('([^/]+$)') }}"
+
+-   name: get version from installer name
+    ansible.builtin.set_fact:
+        oneMKL_version: "{{ installer_name | regex_search('intel-onemkl-(\\d+\\.\\d+\\.\\d+\\.\\d+)_offline.sh') }}"
+
+-   name: install oneMKL
+    ansible.builtin.command:
+        cmd: "{{ installerTmpFolder }}/{{ installer_name }} -a --install-dir={{ sharedSoftwarePath }}/intel/oneAPI{{ oneMKL_version }} --eula accept --silent"
+
+
+
+
+
+#-   name: run installer
 #TODO

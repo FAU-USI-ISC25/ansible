@@ -9,10 +9,10 @@ all:
         head:
             hosts:
                 deuterium:
-                    IB_IPaddresses:
-                        -   10.0.10.22
-                        -   10.0.10.23
                     sharedSoftwareOriginalPath: "/apps"
+        slaves:
+            hosts:
+                tritium:
         GPU:
             hosts:
                 deuterium:
@@ -21,6 +21,10 @@ all:
                 gpuDriverVersion: "575.57.08"
         com:
             hosts:
+                deuterium:
+                    IB_IPaddresses:
+                        - 10.0.10.22
+                        - 10.0.10.23
                 tritium:
                     IB_IPaddresses:
                         -   10.0.10.33
@@ -33,7 +37,8 @@ all:
         cuda_version: "12.9.0"
         modulefilesFolder: "{{ (sharedSoftwarePath, 'modulefiles') | path_join }}"
         cudaDriverVersion: "575.51.03"
-        nvhpc_sdk_version: "2025 255 12.9"
+        nvhpc_sdk_version: "2025 255 12.8"
+        oneMKL_download_link: "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/dc93af13-2b3f-40c3-a41b-2bc05a707a80/intel-onemkl-2025.1.0.803_offline.sh"
         installerTmpFolder: "/root/"
         sharedSoftwarePath: "/apps"
         alma_version: "9.5"

@@ -1,4 +1,4 @@
 -   name: test
     hosts: head
     roles:
-    -   role: install-cuda
+        - role: install-oneMKL
