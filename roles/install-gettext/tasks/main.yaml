@@ -1,0 +1,24 @@
+---
+-   name: download GNU gettext
+    ansible.builtin.unarchive:
+        src: "https://ftp.gnu.org/pub/gnu/gettext/gettext-{{ gettext_version }}.tar.gz"
+        dest: "{{ installerTmpFolder }}"
+        remote_src: yes
+
+-   name: set gettextVersionName
+    ansible.builtin.set_fact:
+        gettextVersionName: "gettext-{{ gettext_version }}"
+
+-   name: configure
+    ansible.builtin.shell:
+        cmd: "./configure --prefix={{ (sharedSoftwarePath, 'gettext', gettextVersionName) | path_join }}"
+        chdir: "{{ (installerTmpFolder, gettextVersionName) | path_join }}"
+
+-   name: make
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, gettextVersionName) |  path_join }}"
+
+-   name: make install
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, gettextVersionName) | path_join }}"
+        target: install

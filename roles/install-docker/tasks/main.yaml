@@ -1,0 +1,16 @@
+---
+-   name: add docker repo
+    ansible.builtin.command:
+        cmd: dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+        creates: /etc/yum.repos.d/docker-ce.repo
+    become: true
+
+-   name: install docker
+    ansible.builtin.dnf:
+        name:
+        -   docker-ce 
+        -   docker-ce-cli
+        -   containerd.io
+        state: present
+    become: true
+    

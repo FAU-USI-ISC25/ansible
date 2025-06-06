@@ -1,0 +1,34 @@
+---
+-  name: create infiniband zone for firewall
+   ansible.posix.firewalld:
+      zone: "infiniband"
+      state: present
+      permanent: true
+
+-  name: reload firewall for new zone
+   ansible.builtin.command:
+      cmd: "firewall-cmd --reload"
+   ignore_errors: true
+
+-  name: allow everything (tcp)
+   ansible.posix.firewalld:
+      zone: "infiniband"
+      port: "1-65535/tcp"
+      permanent: true
+      state: enabled
+
+-  name: allow everything (udp)
+   ansible.posix.firewalld:
+      zone: "infiniband"
+      port: "1-65535/udp"
+      permanent: true
+      state: enabled
+
+-  name: loop over networkinterfaces and add IB to IB zone
+   ansible.posix.firewalld:
+      interface: "{{ item }}"
+      zone: "infiniband"
+      state: enabled
+      permanent: true
+   when: "'infiniband' in ansible_facts[item].type"
+   with_items: "{{ ansible_facts.interfaces }}"

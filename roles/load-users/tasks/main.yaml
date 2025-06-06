@@ -1,0 +1,8 @@
+---
+-   name: copy load users to tmp
+    ansible.builtin.copy:
+        src: load-users-yaml.py
+        dest: /tmp/load-users-yaml.py
+
+-   name: execute the export script
+    ansible.builtin.shell: "python /tmp/load-users-yaml.py > {{ exportPath }}"

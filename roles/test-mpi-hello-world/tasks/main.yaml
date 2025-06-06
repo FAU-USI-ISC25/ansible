@@ -1,0 +1,24 @@
+---
+# dose not work use as instruction
+-   name: create folder for git
+    ansible.builtin.file:
+        path: /root/mpi-hello-world
+        state: directory
+
+-   name: clone git
+    ansible.builtin.git:
+        repo: 'https://github.com/mpitutorial/mpitutorial'
+        dest: /root/mpi-hello-world
+
+-   name: load openmpi
+    ansible.builtin.shell:
+        cmd: "module load openmpi"
+
+-   name: make hello world
+    ansible.builtin.make:
+        chdir: /root/mpi-hello-world/tutorials/mpi-hello-world/code
+
+-   name: run test
+    ansible.builtin.command:
+        cmd: python run.py mpi_hello_world
+        chdir: /root/mpi-hello-world/tutorials

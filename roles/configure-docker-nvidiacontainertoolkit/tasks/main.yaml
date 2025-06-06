@@ -1,0 +1,21 @@
+---
+-   name: add cuda repo
+    ansible.builtin.command:
+        cmd: dnf config-manager --add-repo https://nvidia.github.io/libnvidia-container/stable/rpm/nvidia-container-toolkit.repo
+        creates: /etc/yum.repos.d/nvidia-container-toolkit.repo
+    become: true
+
+-   name: install containertoolkit
+    ansible.builtin.dnf:
+        name: nvidia-container-toolkit
+    become: true
+
+-   name: configure docker to use toolkit
+    ansible.builtin.command:
+        cmd: nvidia-ctk runtime configure --runtime=docker
+    become: true
+
+-   name: restart docker service
+    ansible.builtin.command:
+        cmd: systemctl restart docker
+    become: true

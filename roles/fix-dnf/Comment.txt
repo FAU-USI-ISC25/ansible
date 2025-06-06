@@ -1,0 +1,2 @@
+This role task is a workaround for a bug in AlmaLinux 9 but it takes for ever (>30 min) so we I
+uncommented it in the setup-com.yaml in order to exec it performant multiple times

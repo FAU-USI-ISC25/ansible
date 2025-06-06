@@ -1,0 +1,6 @@
+---
+-   name: Set SELinux to allow
+    ansible.posix.seboolean:
+        name: "{{policy}}"
+        state: true
+        persistent: true

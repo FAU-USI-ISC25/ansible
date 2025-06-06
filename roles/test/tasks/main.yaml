@@ -1,0 +1,5 @@
+---
+-   name: debug
+    ansible.builtin.debug:
+        msg: "{{ lookup('dig', 'emmy2') }}"
+    delegate_to: "{{ inventory_hostname }}"

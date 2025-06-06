@@ -1,0 +1,47 @@
+---
+-   name: download requiered libs for gcc build
+    ansible.builtin.dnf:
+        name:
+        -   gmp-devel
+        -   mpfr-devel
+        -   libmpc-devel
+        state: present
+
+-   name: download gcc in specific version
+    ansible.builtin.unarchive:
+        src: "https://ftp.gnu.org/gnu/gcc/gcc-{{ gcc_version }}/gcc-{{ gcc_version }}.tar.gz"
+        dest: "{{ installerTmpFolder }}"
+        remote_src: yes
+
+-   name: set gcc folder name with version
+    ansible.builtin.set_fact:
+        gccVersionName: "gcc-{{ gcc_version }}"
+
+-   name: set gcc build folder name
+    ansible.builtin.set_fact:
+        gccBuildVersionName: "build-{{ gccVersionName }}"
+
+-   name: mkdir for build
+    ansible.builtin.file:
+        path: "{{ (installerTmpFolder, gccBuildVersionName ) | path_join }}"
+        state: directory
+
+-   name: configure gcc
+    ansible.builtin.shell:
+        cmd: "{{ ('..', gccVersionName, 'configure') | path_join }} --prefix={{ (sharedSoftwarePath, 'gcc', gccVersionName) | path_join }} --enable-languages=c,c++,fortran --disable-multilib" # no 32-bit
+        chdir: "{{ (installerTmpFolder, gccBuildVersionName) | path_join }}"
+    
+
+-   name: set gettextVersionName
+    ansible.builtin.set_fact:
+        gettextVersionName: "gettext-{{ gettext_version }}"
+    
+-   name: make
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, gccBuildVersionName) | path_join }}"
+    
+
+-   name: make install
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, gccBuildVersionName) | path_join }}"
+        target: install-strip

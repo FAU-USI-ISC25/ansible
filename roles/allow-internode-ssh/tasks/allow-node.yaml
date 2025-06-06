@@ -1,0 +1,17 @@
+---
+-   name: gather facts for all nodes
+    ansible.builtin.setup:
+    delegate_to: "{{ item }}"
+    delegate_facts: true
+    ignore_unreachable: true
+    
+-   name: run ssh-keyscan on node
+    ansible.builtin.shell:
+        cmd: "ssh-keyscan {{ item }},{{ hostvars[item]['ansible_default_ipv4']['address'] }}"
+    register: ssh_public_key
+    changed_when: false
+
+-   name: add other nodes to known hosts
+    ansible.builtin.known_hosts:
+        name: "{{ item }}"
+        key: "{{ ssh_public_key.stdout }}"

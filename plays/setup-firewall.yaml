@@ -1,0 +1,30 @@
+---
+-   name: allow ssh and InfiniBand trow firewall in new cluster zone
+    hosts: all
+
+    roles:
+    -   role: enable-firewall-ports
+        vars:
+            services:
+            -   "ssh"
+    -   role: enable-firewall-infiniband #TODO
+
+-   name: Head nfs enable firewall
+    hosts: head
+
+    roles:
+    -   role: enable-firewall-ports
+        vars:
+            services:
+            -   "nfs"
+            -   "rpc-bind"
+            -   "mountd"
+    
+
+-   name: Reenable firewall (if stopped)
+    hosts: all
+
+    roles:
+    -   role: enable-autostart
+        vars:
+            service: "firewalld"

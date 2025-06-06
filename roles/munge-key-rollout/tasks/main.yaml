@@ -1,0 +1,26 @@
+---
+#-   name: set ownership for folders
+#    ansible.builtin.file:
+#        path: "{{ item }}"
+#        state: directory
+#        owner: munge
+#        group: munge
+#        recurse: yes
+#    with_items:
+#    -   /usr/local/var/log/munge
+#    -   /usr/local/var/lib/munge
+#    -   /usr/local/etc/munge
+#    -   /usr/local/var/run/munge
+
+-   name: push file from head to com
+    ansible.posix.synchronize:
+        src: "/etc/munge/munge.key"
+        dest: "/etc/munge/munge.key" #why? "/usr/local/etc/munge/munge.key"
+    delegate_to: "{{ groups.head[0] }}"
+
+-   name: set ownership for key file
+    ansible.builtin.file:
+        path: "/etc/munge/munge.key"
+        mode: '0600'
+        owner: munge
+        group: munge

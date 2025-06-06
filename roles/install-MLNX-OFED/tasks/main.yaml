@@ -1,0 +1,21 @@
+---
+-   name: download and unpack MLNX-OFED Driver
+    ansible.builtin.unarchive:
+        src: "{{ mlnx_ofed_download_link }}"
+        dest: "{{ installerTmpFolder }}" #"{{ (installerTmpFolder, 'MLNX-OFED') | path_join }}"
+        remote_src: yes
+
+-   name: install perl, gcc-gfortan and tk as needed for the mlnxofedinstaller
+    ansible.builtin.dnf:
+        name:
+        -   perl
+        -   gcc-gfortran
+        -   tk
+        state: present
+
+
+
+#-   name: install MLNX-OFED Driver
+#    ansible.builtin.shell:
+#        cmd: "./mlnxofedinstall --all --with-nfsrdma --force" #TODO why stuck?
+#        chdir: "{{ (installerTmpFolder, mlnx_ofed_version) | path_join }}"

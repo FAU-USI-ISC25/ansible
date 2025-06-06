@@ -1,0 +1,31 @@
+---
+-   name: download libfyaml from github
+    ansible.builtin.git:
+        repo: 'https://github.com/pantoniou/libfyaml'
+        dest: "{{ installerTmpFolder }}"
+
+-   name: bootstrap
+    ansible.builtin.shell:
+        cmd: "./bootstrap.sh"
+        chdir: "{{ (installerTmpFolder, 'libfyaml') | path_join }}"
+
+
+-   name: configure
+    ansible.builtin.shell:
+        cmd: "./configure --prefix={{ shared-software-path }}"
+        chdir: "{{ (installerTmpFolder, 'libfyaml') | path_join }}"
+
+-   name: make
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, 'libfyaml') | path_join }}"
+
+-   name: make check
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, 'libfyaml') | path_join }}"
+        target: check
+
+-   name: make install
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, 'libfyaml') | path_join }}"
+        target: install
+

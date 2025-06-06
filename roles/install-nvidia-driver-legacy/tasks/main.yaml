@@ -1,0 +1,22 @@
+---
+#-   name: download legacy driver (470)
+#    ansible.builtin.get_url:
+#        url: https://us.download.nvidia.com/tesla/460.106.00/NVIDIA-Linux-x86_64-460.106.00.run
+#        dest: /root/NVIDIA-Linux-x86_64-460.106.00.run
+
+-   name: download run file
+    ansible.builtin.get_url:
+        url: "https://us.download.nvidia.com/tesla/{{ gpu-driver-version }}/NVIDIA-Linux-x86_64-{{ gpu-driver-version.run"
+        dest: "{{ installer-tmp-folder }}"
+
+-   name: install gcc and kernel-devel
+    ansible.builtin.dnf:
+        name:
+        -   gcc
+        -   kernel-devel
+        state: present
+
+-   name: exec run file
+    ansible.builtin.shell:
+        cmd: "sh NVIDIA-Linux-x86_64-{{ gpu-driver-version }}.run -s"
+        chdir: "{{ installer-tmp-folder }}"

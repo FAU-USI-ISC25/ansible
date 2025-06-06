@@ -1,0 +1,39 @@
+---
+-   name: enable ports
+    ansible.posix.firewalld:
+        zone: "{{ zone }}"
+        port: "{{ item }}/{{ protocol }}"
+        state: enabled
+        permanent: true
+    loop: "{{ ports }}"
+    when: ports is defined
+
+-   name: enable port
+    ansible.posix.firewalld:
+        zone: "{{ zone }}"
+        port: "{{ port }}/{{ protocol }}"
+        state: enabled
+        permanent: true
+    when: port is defined
+
+-   name: enable service
+    ansible.posix.firewalld:
+        zone: "{{ zone }}"
+        service: "{{ service }}"
+        state: enabled
+        permanent: true
+    when: service is defined
+
+-   name: enable service
+    ansible.posix.firewalld:
+        zone: "{{ zone }}"
+        service: "{{ item }}"
+        state: enabled
+        permanent: true
+    loop: "{{ services }}"
+    when: services is defined
+
+-   name: reload firewalld
+    ansible.builtin.command:
+        cmd: "firewall-cmd --reload"
+    ignore_errors: true

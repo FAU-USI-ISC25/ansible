@@ -1,0 +1,39 @@
+---
+-   name: gather facts for all nodes
+    ansible.builtin.setup:
+    delegate_to: "{{ item }}"
+    delegate_facts: true
+    with_inventory_hostnames:
+    -   all
+
+-   name: create empty list for IPoIB_addresses
+    ansible.builtin.set_fact:
+        IPoIB_addresses: []
+
+-   name: add the network part of ip address to list if interface is InfiniBand
+    ansible.builtin.set_fact:
+        IPoIB_addresses: "{{ IPoIB_addresses + [hostvars[item.0.inventory_hostname]['ansible_facts'][item.1]['ipv4']['address']]}}"
+    when: hostvars[item.0.inventory_hostname]['ansible_facts'][item.1].active and hostvars[item.0.inventory_hostname]['ansible_facts'][item.1].type == "infiniband"
+    with_subelements: # THIS COMMAND WILL BOMB YOU WITH OUTPUT!!!
+    -   "{{ hostvars }}"
+    -   ansible_facts.interfaces
+
+-   name: create empty list for IPoIB_networks
+    ansible.builtin.set_fact:
+        IPoIB_networks: []
+
+-   name: add the ip address to list if interface is InfiniBand
+    ansible.builtin.set_fact:
+        IPoIB_networks: "{{ IPoIB_networks + [hostvars[item.0.inventory_hostname]['ansible_facts'][item.1]['ipv4']['network']]}}"
+    when: hostvars[item.0.inventory_hostname]['ansible_facts'][item.1].active and hostvars[item.0.inventory_hostname]['ansible_facts'][item.1].type == "infiniband" and not hostvars[item.0.inventory_hostname]['ansible_facts'][item.1]['ipv4']['network'] in IPoIB_networks
+    with_subelements: # THIS COMMAND WILL BOMB YOU WITH OUTPUT!!!
+    -   "{{ hostvars }}"
+    -   ansible_facts.interfaces
+
+-   name: print debug output IPoIB_networks
+    ansible.builtin.debug:
+        msg: "{{ IPoIB_networks }}"
+
+-   name: print debug output IPoIB_addresses
+    ansible.builtin.debug:
+        msg: "{{ IPoIB_addresses }}"

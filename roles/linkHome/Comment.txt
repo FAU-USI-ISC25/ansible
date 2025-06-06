@@ -1,0 +1,1 @@
+Did not work probably with Slurm because if you salloc a node it tried to redirect you to the exports/home witch did not exist on the com node

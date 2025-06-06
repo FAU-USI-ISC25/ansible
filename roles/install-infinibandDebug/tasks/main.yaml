@@ -1,0 +1,16 @@
+---
+-   name: install perl needed by ibdiagnet
+    ansible.builtin.dnf:
+        name: perl
+        state: present
+
+-   name: download ibdiagnet from nvidia
+    ansible.builtin.get_url:
+        url: "https://www.mellanox.com/downloads/tools/mlnx_ib_mgmt-5.20.0-1.el9.x86_64.rpm"
+        dest: "{{ installerTmpFolder }}"
+
+-   name: install ibdiagnet rpm
+    ansible.builtin.yum:
+        name: "{{ ( installerTmpFolder, 'mlnx_ib_mgmt-5.20.0-1.el9.x86_64.rpm' ) | path_join }}"
+        state: present
+        disable_gpg_check: true

@@ -1,0 +1,18 @@
+---
+-   name: install pip packets for MTT
+    ansible.builtin.pip:
+        name: "{{ item }}"
+    with_items:
+    -   Yapsy
+    -   junit-xml
+    -   hostlist
+
+-   name: create folder for git
+    ansible.builtin.file:
+        path: /root/MTT
+        state: directory
+
+-   name: download MTT mpi test tool
+    ansible.builtin.git:
+        repo: 'https://github.com/open-mpi/mtt'
+        dest: /root/MTT

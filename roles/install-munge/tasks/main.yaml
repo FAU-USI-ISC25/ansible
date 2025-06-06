@@ -1,0 +1,8 @@
+---
+-   name: install munge depend for slurm
+    ansible.builtin.dnf:
+        name:
+        -   munge
+        -   munge-devel
+        -   munge-libs
+        state: present

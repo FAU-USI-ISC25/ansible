@@ -1,0 +1,20 @@
+---
+-   name: set name for file to copy
+    ansible.builtin.set_fact:
+        rpmName: "{{ item }}-{{ slurmVersion }}-1.el9.x86_64.rpm"
+
+-   name: copy file from head to com
+    ansible.posix.synchronize:
+        src: "{{ (installerTmpFolder, 'rpmbuild/RPMS/x86_64/', rpmName) | path_join }}"
+        dest: "{{ (installerTmpFolder, 'rpmbuild/RPMS/x86_64/', rpmName) | path_join }}"
+    delegate_to: "{{ groups.head[0] }}"
+
+-   name: rpm install files
+    ansible.builtin.command: "rpm --install /root/rpmbuild/RPMS/x86_64/{{ item }}-{{ slurmVersion }}-1.el9.x86_64.rpm" #installation will be in home of buiding user
+    when: "item | string not in ansible_facts.packages"
+
+-   name: rpm reinstall files
+    ansible.builtin.command: "rpm --reinstall /root/rpmbuild/RPMS/x86_64/{{ item }}-{{ slurmVersion }}-1.el9.x86_64.rpm"
+    when:
+    -   "item | string in ansible_facts.packages"
+    -   reinstall

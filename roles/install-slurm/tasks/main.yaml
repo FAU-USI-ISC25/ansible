@@ -1,0 +1,85 @@
+---
+-   name: ensure folder for download is present
+    ansible.builtin.file:
+        path: "{{ (installerTmpFolder, 'slurm') | path_join }}"
+        state: directory
+
+-   name: Gather package_facts
+    ansible.builtin.package_facts:
+        manager: rpm
+
+-   name: perform installation if necessary
+    block:
+
+    -   name: download tar
+        ansible.builtin.get_url:
+            url: "https://download.schedmd.com/slurm/slurm-{{ slurmVersion }}.tar.bz2"
+            dest: "{{ (installerTmpFolder, 'slurm') | path_join }}"
+
+    -   name: install rpm-build  #lol use less
+        ansible.builtin.dnf:
+            name: rpm-build
+            state: present
+#
+#    -   name: copy .rpmmacros
+#        ansible.builtin.copy:
+#            src: ".rpmmacros"
+#            dest: "/root"
+    -   name: install dependet for slurm
+        ansible.builtin.dnf:
+            name:
+            -   pam-devel
+            -   perl
+            -   readline-devel
+            -   mariadb-devel
+            -   dbus-devel #fuck is important for cgroup
+    -   name: set fact with slurm archive
+        ansible.builtin.set_fact:
+            slurmArcive: "slurm-{{ slurmVersion }}.tar.bz2"
+
+    -   name: rpmbuild
+        ansible.builtin.command:
+            cmd: "rpmbuild -ta --define '_with_pmix --with-pmix=/usr/' {{ (installerTmpFolder, 'slurm', slurmArcive) | path_join }}  --without mysql " #TODO
+            creates: "{{ (installerTmpFolder, 'rpmbuild/RPMS/x86_64/slurm*.rpm') | path_join }}"
+        when: not rebuild
+
+    -   name: rebuild rpmbuild
+        ansible.builtin.command:
+            cmd: "rpmbuild -ta --define '_with_pmix --with-pmix=/usr/'  {{ (installerTmpFolder, 'slurm', slurmArcive ) | path_join }} --without mysql " #TODO
+        when: rebuild
+
+    -   name: rpm install files
+        ansible.builtin.command: "rpm --install /root/rpmbuild/RPMS/x86_64/{{ item }}-{{ slurmVersion }}-1.el9.x86_64.rpm" #installation will be in home of buiding user
+        when: "item | string not in ansible_facts.packages"
+        with_items:
+        -   slurm
+        -   slurm-slurmctld
+        -   slurm-slurmd
+        -   slurm-perlapi
+        -   slurm-pam_slurm
+        -   slurm-libpmi
+        -   slurm-torque
+        -   slurm-devel
+        -   slurm-contribs
+        -   slurm-example-configs
+        -   slurm-openlava
+
+    -   name: rpm reinstall files
+        ansible.builtin.command: "rpm --reinstall /root/rpmbuild/RPMS/x86_64/{{ item }}-{{ slurmVersion }}-1.el9.x86_64.rpm"
+        when:
+        -   "item | string in ansible_facts.packages"
+        -   rebuild
+        with_items:
+        -   slurm
+        -   slurm-slurmctld
+        -   slurm-slurmd
+        -   slurm-perlapi
+        -   slurm-pam_slurm
+        -   slurm-libpmi
+        -   slurm-torque
+        -   slurm-devel
+        -   slurm-contribs
+        -   slurm-example-configs
+        -   slurm-openlava
+
+    when: true

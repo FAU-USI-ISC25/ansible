@@ -1,0 +1,18 @@
+---
+-   name: add cuda repo
+    ansible.builtin.command:
+        cmd: dnf config-manager --add-repo http://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64/cuda-rhel9.repo
+        creates: /etc/yum.repos.d/cuda-rhel9.repo
+
+-   name: install containertoolkit
+    ansible.builtin.dnf:
+        name: nvidia-container-toolkit
+
+-   name: load nvidia driver
+    ansible.builtin.shell: modprobe nvidia_uvm
+
+-   name: create cron to load nvidia driver on boot
+    ansible.builtin.cron:
+        name: "load nvidia driver"
+        job: "modprobe nvidia_uvm"
+        special_time: reboot

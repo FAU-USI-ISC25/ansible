@@ -1,0 +1,18 @@
+---
+-   name: do if interface is infiniBand
+    block:
+    #-   name: print interface name
+    #    ansible.builtin.debug:
+    #        msg: "{{ interfaceName }} number: {{ currentIPindex }} IB_IPaddress: {{ IB_IPaddresses }}"
+
+    -   name: deploy network configuration file
+        ansible.builtin.template:
+            src: IPconfig.j2
+            dest: "/etc/sysconfig/network-scripts/ifcfg-{{ interfaceName }}"
+            backup: true
+            force: "{{override_IB_IPaddress}}" #default False
+
+    -   name: increment currentIPindex
+        ansible.builtin.set_fact:
+            currentIPindex: "{{ currentIPindex|int + 1 }}"
+    when: "'infiniband' in ansible_facts[interfaceName].type and (ansible_facts[interfaceName].active or not ignore_unactive_IB_interface)"

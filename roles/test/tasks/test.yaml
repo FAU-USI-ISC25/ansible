@@ -1,0 +1,4 @@
+---
+-   name: set fakt test123
+    ansible.builtin.set_fact:
+        test123: "test123lol"

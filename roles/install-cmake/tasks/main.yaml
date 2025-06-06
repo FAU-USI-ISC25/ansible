@@ -1,0 +1,11 @@
+---
+-   name: download sh file
+    ansible.builtin.get_url:
+        url: "{{ link }}"
+        dest: "{{ (installer-tmp-folder, 'cmakeInstaller.sh' ) | path_join }}"
+        mode: '0700'
+
+-   name: run installer
+    ansible.builtin.shell:
+        cmd: "sh cmakeInstaller.sh --skip-license --prefix={{ path }}"
+        chdir: "{{ installer-tmp-folder }}"

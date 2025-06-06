@@ -1,0 +1,46 @@
+all:
+    children:
+        head:
+            hosts:
+                drain:
+                    sharedSoftwareOriginalPath: "/apps"
+        com:
+            hosts:
+                hot:
+                    IB_IPaddresses:
+                    -   10.2.1.1
+                    -   10.2.2.2
+                cold:
+                    IB_IPaddresses:
+                    -   10.2.2.1
+                    -   10.2.1.2
+                drain:
+            vars:
+                installerTmpFolder: "/root"
+                sharedSoftwarePath: "/apps"
+        gpu:
+            hosts:
+                hot:
+                cold:
+            vars:
+                gpuDriverVersion: "latest"
+    vars: #no idea if top level vars work
+        clusterUsers:
+        -   adrian
+        -   jay
+        -   johannes
+        -   melanie
+        -   nils
+        -   onur
+        -   tobias
+        -   faucet
+        homeFolder: /home
+        slurmVersion: "24.05.3"
+        openMPIVersion: "4.1.6"
+        IBnetmask: 255.255.255.252 # /2
+        privateSSHkey: "id_faucet" #say no to security because this privateSSHkey gets copyed from your laptop
+        isa: "x86_64"
+        # nvhpc_sdk_version: "2024 249 12.6" # Jahr version cuda_version
+        nvhpc_sdk_version: "2023 237 12.2" # Jahr version cuda_version
+        cuda_version: "12.6.0"
+        modulefilesFolder: "{{ (sharedSoftwarePath, 'modulefiles') | path_join }}"

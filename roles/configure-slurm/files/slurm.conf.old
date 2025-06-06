@@ -1,0 +1,17 @@
+#Management Policies
+ClusterName         =test
+ControlMachine      =pc-t2-n0
+SlurmUser           =slurm
+SlurmctldPort       =7012
+SlurmdPort          =7013
+StateSaveLocation   =/var/spool/slurmd
+AuthType            =auth/munge
+LaunchParameters    =use_interactive_step
+
+#Node Definitions
+NodeName=DEFAULT Sockets=1 CoresPerSocket=4 ThreadsPerCore=1
+NodeName=pc-t2-n[0-1]
+
+#Partition Definitions
+PartitionName=all Nodes=pc-t2-n[0-1]
+PartitionName=com Nodes=pc-t2-n1 Default=YES

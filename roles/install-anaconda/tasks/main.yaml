@@ -1,0 +1,11 @@
+---
+-   name: download Installer
+    ansible.builtin.get_url:
+        url: "https://repo.anaconda.com/archive/Anaconda3-{{ version }}-Linux-x86_64.sh"
+        dest: "{{ (installerTmpFolder, 'anacondaInstaller.sh' ) | path_join }}"
+        mode: '0700'
+
+-   name: run Installer
+    ansible.builtin.shell:
+        cmd: "bash anacondaInstaller.sh -b -f -m -p {{ path }}"
+        chdir: "{{ installerTmpFolder }}"

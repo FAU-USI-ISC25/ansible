@@ -1,0 +1,3 @@
+---
+-   name: unload infiniband driver
+    ansible.builtin.shell: modprobe -r mlx4_ib mlx4_en mlx4_core

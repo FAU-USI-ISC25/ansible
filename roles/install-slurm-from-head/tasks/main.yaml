@@ -1,0 +1,38 @@
+---
+-   name: install
+    ansible.builtin.dnf:
+        name: mariadb
+
+-   name: create folder
+    ansible.builtin.file:
+        path: "/root/rpmbuild/RPMS/x86_64"
+        state: directory
+
+# WARNING dose not work if control = head
+#-   name: get slurm rpms from head
+#    ansible.posix.synchronize:
+#        src: "{{ item }}"
+#        dest: "{{ item }}"
+#    delegate_to: "{{ groups.head[0] }}"
+#    with_fileglob: "/root/rpmbuild/RPMS/x86_64/*.rpm"
+-   name: gather package_facts
+    ansible.builtin.package_facts:
+        manager: rpm
+
+-   name: install slurm rpms
+    ansible.builtin.include_tasks:
+        file: install.yaml
+    loop:
+    -   slurm
+    #-   slurm-slurmctld
+    -   slurm-slurmd
+    -   slurm-perlapi
+    -   slurm-pam_slurm
+    -   slurm-libpmi
+    -   slurm-torque
+    -   slurm-devel
+    -   slurm-contribs
+    -   slurm-example-configs
+    -   slurm-openlava
+
+

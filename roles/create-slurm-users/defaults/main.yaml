@@ -1,0 +1,3 @@
+homeFolder: "/home/system"
+uidSlurm: "2000"
+uidMunge: "2001"

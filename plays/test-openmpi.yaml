@@ -1,0 +1,7 @@
+---
+-   name: test mpi
+    hosts: head
+
+    roles:
+    -   role: test-mpi-hello-world
+    #-   role: test-openmpi

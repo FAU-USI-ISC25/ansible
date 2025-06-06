@@ -1,0 +1,30 @@
+---
+-   name: setup infiniband
+    hosts: com
+
+    roles:
+    -   role: unlimit-rdma-users
+    # -   role: install-package
+    #     vars:
+    #         packages:
+    #         -   libibverbs
+    #         -   libibverbs-utils
+    #         -   infiniband-diags
+
+# -   name: setup openSM
+#     hosts: head
+#
+#     roles:
+#     -   role: install-package
+#         vars:
+#             package: opensm
+#     -   role: enable-autostart
+#         vars:
+#             service: opensm
+
+-   name: configure IP-addresses for IB
+    hosts: com
+
+    roles:
+#    -   role: install-infinibandDebug
+    -   role: configure-ib-ip

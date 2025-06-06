@@ -1,0 +1,27 @@
+---
+-   name: create key for munge
+    ansible.builtin.command:
+        cmd: "create-munge-key" #"mungekey --verbose"
+        creates: "/etc/munge/munge.key"
+
+-   name: set ownership for key file
+    ansible.builtin.file:
+        path: "/etc/munge/munge.key"
+        mode: '0600'
+        owner: munge
+        group: munge
+
+
+
+#-   name: set ownership for folders
+#    ansible.builtin.file:
+#        path: "{{ item }}"
+#        state: directory
+#        owner: munge
+#        group: munge
+#        recurse: yes
+#    with_items:
+#    -   /usr/local/var/log/munge
+#    -   /usr/local/var/lib/munge
+#    -   /usr/local/etc/munge
+#    -   /usr/local/var/run/munge

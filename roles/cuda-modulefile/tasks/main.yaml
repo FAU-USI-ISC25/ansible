@@ -1,0 +1,23 @@
+---
+-   name: set name for cuda modulefile
+    ansible.builtin.set_fact:
+        cudaVersionName: "cuda-{{ cuda_version }}"
+
+-   name: set absulute path for cuda for modulefile
+    ansible.builtin.set_fact:
+        cudaAbsolutePath: "{{ (sharedSoftwarePath, 'cuda', cudaVersionName) | path_join }}"
+
+-   name: set cudaModulefilename
+    ansible.builtin.set_fact:
+        cudaModulefilename: "{{ cudaVersionName }}.lua"
+
+-   name: create folder for cuda-modulefile
+    ansible.builtin.file:
+        path: "{{ (modulefilesFolder, 'cuda') | path_join }}"
+        state: directory
+
+-   name: put template for cuda into corect location
+    ansible.builtin.template:
+        src: cuda-version.lua.j2
+        dest: "{{ (modulefilesFolder, 'cuda', cudaModulefilename) | path_join }}"
+        force: false

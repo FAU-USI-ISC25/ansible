@@ -1,0 +1,9 @@
+---
+-   name: download GDRcopy rpm neaded for NVSHMEM
+    ansible.builtin.get_url:
+        dest: "{{ installerTmpFolder }}"
+        url: "https://developer.download.nvidia.com/compute/redist/gdrcopy/CUDA%2012.2/rhel9/x64/gdrcopy-2.4-1.el9.x86_64.rpm"
+
+-   name: install GDRcopy rpm
+    ansible.builtin.yum:
+        name: "gdrcopy-2.4-1.el9.x86_64.rpm"

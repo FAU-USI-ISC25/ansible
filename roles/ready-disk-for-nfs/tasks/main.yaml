@@ -1,0 +1,45 @@
+---
+# This file is part of the Ansible role to prepare a disk for NFS usage.
+# creates a single gpt partition on a disk, formats it with XFS, and mounts it.
+- name: Ensure the disk is present
+  ansible.builtin.assert:
+    that:
+      - nfs_disk_device is defined
+    fail_msg: "The variable 'nfs_disk_device' must be defined."
+
+- name: Ensure the mount path is defined
+  ansible.builtin.assert:
+    that:
+      - nfs_disk_mount_path is defined
+    fail_msg: "The variable 'nfs_disk_mount_path' must be defined."
+
+- name: Create a new partition on the disk
+  ansible.builtin.command:
+    cmd: "parted -s {{ nfs_disk_device }} mklabel gpt mkpart primary xfs 0% 100%"
+
+- name: Create XFS filesystem
+  ansible.builtin.filesystem:
+    fstype: xfs
+    dev: "{{ nfs_disk_device }}p1"
+
+- name: Create mount directory
+  ansible.builtin.file:
+    path: "{{ nfs_disk_mount_path }}"
+    state: directory
+    mode: '0755'
+
+- name: Mount the new filesystem
+  ansible.builtin.mount:
+    path: "{{ nfs_disk_mount_path }}"
+    src: "{{ nfs_disk_device }}p1"
+    fstype: xfs
+    state: mounted
+
+- name: Create /homes and /apps inside mount
+  ansible.builtin.file:
+    path: "{{ mount_path }}/{{ item }}"
+    state: directory
+    mode: '0777'
+  loop:
+    - homes
+    - apps

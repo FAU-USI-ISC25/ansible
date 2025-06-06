@@ -1,0 +1,30 @@
+---
+-   name: clone openucx git repo
+    ansible.builtin.git:
+        repo: https://github.com/openucx/ucx.git
+        dest: "{{ (installerTmpFolder, 'ucx') | path_join }}"
+
+-   name: run autogen script
+    ansible.builtin.shell:
+        cmd: ./autogen.sh
+        chdir: "{{ (installerTmpFolder, 'ucx') | path_join }}"
+
+-   name: create build dir
+    ansible.builtin.file:
+        state: directory
+        path: "{{ (installerTmpFolder, 'ucx', 'build') | path_join }}"
+
+-   name: configure UCX
+    ansible.builtin.shell:
+        cmd: "../contrib/configure-release --prefix={{ installPath }}"
+        chdir: "{{ (installerTmpFolder, 'ucx', 'build') | path_join }}"
+
+-   name: make ucx
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, 'ucx', 'build') | path_join }}"
+        jobs: 4 #specified in documentation
+
+-   name: make install
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, 'ucx', 'build') | path_join }}"
+        target: install

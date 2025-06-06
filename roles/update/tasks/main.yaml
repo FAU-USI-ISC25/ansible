@@ -1,0 +1,21 @@
+---
+-   name: Update package manager
+    ansible.builtin.dnf:
+        name: "*"
+        state: latest
+        skip_broken: true #kotz
+        nobest: true #kotz
+
+-   name: gather the package facts
+    ansible.builtin.package_facts:
+        manager: auto
+
+-   name: Install tool update and perform update of pip
+    block:
+    -   name: Install tool to update pip python package manager
+        ansible.builtin.pip:
+            name: pip-review
+
+    -   name: Update pip python package manager
+        ansible.builtin.command: pip-review --local --auto
+    when: "'pip' in ansible_facts.packages"

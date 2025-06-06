@@ -1,0 +1,9 @@
+---
+-   name: install nvidia GPU driver
+    hosts: GPU
+
+    roles:
+    -   role: enable-repos
+    -   role: block-nouveau
+    -   role: install-nvidia-driver
+

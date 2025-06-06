@@ -1,0 +1,17 @@
+---
+-   name: start services and autostart
+    ansible.builtin.systemd:
+        state: started
+        name: "{{ item }}"
+        enabled: true
+    loop: "{{ services }}"
+    when: services is defined
+    become: true
+
+-   name: start service and autostart
+    ansible.builtin.systemd:
+        state: started
+        name: "{{ service }}"
+        enabled: true
+    when: service is defined
+    become: true

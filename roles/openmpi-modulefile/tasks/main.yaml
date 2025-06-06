@@ -1,0 +1,29 @@
+---
+-   name: set var openMPI version name
+    ansible.builtin.set_fact:
+        openMPIVersionName: "openmpi-{{ openMPIVersion }}"
+
+-   name: set openMPI extended version name with cuda
+    ansible.builtin.set_fact:
+        openMPIExtendedVersionName: "{{ openMPIVersionName }}-cuda{{ cuda_version }}"
+    when: openMPIwithCuda |bool
+
+-   name: set openmpi path for template
+    ansible.builtin.set_fact:
+        openMPIAbsolutePath: "{{ (sharedSoftwarePath, 'openmpi', openMPIExtendedVersionName) | path_join }}"
+
+-   name: set var for openMPI modulefile name
+    ansible.builtin.set_fact:
+        openMPIModulefileName: "{{ openMPIExtendedVersionName }}.lua"
+
+-   name: Create modulefile folder
+    ansible.builtin.file:
+        path: "{{ (modulefilesFolder, 'openmpi') | path_join }}"
+        state: directory
+        mode: "0755"
+
+-   name: put openmpi modulefile to modulefile location
+    ansible.builtin.template:
+        src: openmpi-version.lua.j2
+        dest: "{{ (modulefilesFolder, 'openmpi', openMPIModulefileName) | path_join }}"
+        force: false # do not override existing file

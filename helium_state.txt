@@ -1,0 +1,28 @@
+playbooks ausgeführt:
+
+roll set-dnf-to-alma-version
+roll install-MLNX-OFED
+play setup-infiniband.yaml
+play setup-GPU-driver.yaml
+play setup-head.yaml
+play setup.com.yaml
+play setup-lmod
+play setup-nvidia-toolkits --tags nvhpc
+
+role install-cuda
+role cuda-modulefile
+
+brauchen
+modules:
+nvhpc
+intel_llm
+
+dnf install on all nodes:
+htop
+btop
+gitlfs
+numactl
+cmake
+apptainer
+autoconf
+automake

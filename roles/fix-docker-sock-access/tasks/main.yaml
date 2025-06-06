@@ -1,0 +1,8 @@
+---
+-   name: Change ownership of Docker socket
+    ansible.builtin.file:
+        path: /var/run/docker.sock
+        owner: root
+        group: docker
+        mode: '0660'
+    become: true

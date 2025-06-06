@@ -1,0 +1,56 @@
+all:
+    children:
+        others:
+            hosts:
+                hydrogen:
+                viz:
+                    vars:
+                        remote_user: faucet
+        head:
+            hosts:
+                deuterium:
+                    IB_IPaddresses:
+                        -   10.0.10.22
+                        -   10.0.10.23
+                    sharedSoftwareOriginalPath: "/apps"
+        GPU:
+            hosts:
+                deuterium:
+                tritium:
+            vars:
+                gpuDriverVersion: "575.57.08"
+        com:
+            hosts:
+                tritium:
+                    IB_IPaddresses:
+                        -   10.0.10.33
+                        -   10.0.10.34
+                #hydrogen:
+                #    IB_IPaddresses:
+                #        -   10.0.10.11
+                #        -   10.0.10.12
+    vars:
+        cuda_version: "12.9.0"
+        modulefilesFolder: "{{ (sharedSoftwarePath, 'modulefiles') | path_join }}"
+        cudaDriverVersion: "575.51.03"
+        nvhpc_sdk_version: "2025 255 12.9"
+        installerTmpFolder: "/root/"
+        sharedSoftwarePath: "/apps"
+        alma_version: "9.5"
+        nfs_disk_device: "/dev/nvme1n1"
+        nfs_disk_mount_path: "/mnt/data"
+        IBnetmask: "255.255.255.0"
+        homeFolder: "/home"
+        isa: "x86_64"
+        #gcc_version:
+        clusterUsers:
+        -   coehlrich
+        -   afinardi
+        -   aujeniya
+        -   jholtmann
+        -   nbloshchanevich
+        -   gmeyer
+        -   jdittrich
+        -   nlederer
+        -   tonoprishvili
+        -   mheckel

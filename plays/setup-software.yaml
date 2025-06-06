@@ -1,0 +1,7 @@
+---
+-   name: setup needed software
+    hosts: head
+
+    roles:
+    -   role: install-anaconda
+    -   role: install-cmake

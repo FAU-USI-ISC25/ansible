@@ -1,0 +1,18 @@
+---
+-   name: download cuda installer
+    ansible.builtin.get_url:
+        dest: "{{ installerTmpFolder }}"
+        url: "https://developer.download.nvidia.com/compute/cuda/{{ cuda_version }}/local_installers/cuda_{{ cuda_version }}_{{ cudaDriverVersion }}_linux.run"
+
+-   name: set name for cuda modulefile
+    ansible.builtin.set_fact:
+      cudaVersionName: "cuda-{{ cuda_version }}"
+
+-   name: get folder name
+    ansible.builtin.set_fact:
+      cuda_folder: "{{ (sharedSoftwarePath, 'cuda', cudaVersionName) | path_join }}"
+
+-   name: install cuda
+    ansible.builtin.shell:
+      cmd: "./cuda_{{ cuda_version }}_{{ cudaDriverVersion }}_linux.run --silent --installpath={{ cuda_folder }} --no-man-page"
+

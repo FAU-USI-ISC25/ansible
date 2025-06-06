@@ -1,0 +1,13 @@
+- name: Find AlmaLinux repo files
+  ansible.builtin.find:
+    paths: /etc/yum.repos.d
+    patterns: 'almalinux*.repo'
+  register: alma_repo_files
+
+- name: Replace $releasever with the specific alma_version in all AlmaLinux repos
+  ansible.builtin.replace:
+    path: "{{ item.path }}"
+    regexp: '\$releasever'
+    replace: "{{ alma_version }}"
+    backup: yes
+  loop: "{{ alma_repo_files.files }}"

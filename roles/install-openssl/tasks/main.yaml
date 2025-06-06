@@ -1,0 +1,38 @@
+---
+-   name: install FindBin and IPC-cmd from dnf
+    ansible.builtin.dnf:
+        name:
+        -   perl-FindBin
+        -   perl-IPC-Cmd
+        -   perl-Pod-Html
+        state: present
+
+-   name: check if repo exists #nessasary for repinting role
+    ansible.builtin.stat:
+        path: "{{ path }}/.git"
+    register: repoStat
+
+#-   name: debug
+#    ansible.builtin.debug:
+#        msg: "{{repoStat.stat.exists}}"
+
+-   name: clone repo
+    ansible.builtin.git:
+        repo: "https://github.com/openssl/openssl.git"
+        dest: "{{ path }}"
+        clone: "{{repoStat.stat.exists == False}}"
+
+-   name: configure openssl
+    ansible.builtin.command:
+        cmd: "./Configure --prefix=/usr/local/ssl --openssldir=/usr/local/ssl"
+        chdir: "{{ path }}"
+        creates: "{{ path }}/Makefile"
+
+-   name: make
+    ansible.builtin.make:
+        chdir: "{{ path }}"
+
+-   name: make install
+    ansible.builtin.make:
+        chdir: "{{ path }}"
+        target: install

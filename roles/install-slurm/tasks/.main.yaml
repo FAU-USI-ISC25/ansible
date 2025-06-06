@@ -1,0 +1,74 @@
+---
+-   name: ensure folder for download is present
+    ansible.builtin.file:
+        path: "{{ path }}"
+        state: directory
+
+-   name: Gather package_facts
+    ansible.builtin.package_facts:
+        manager: rpm
+
+-   name: perform installation if necessary
+    block:
+
+    -   name: download tar
+        ansible.builtin.get_url:
+            url: "https://download.schedmd.com/slurm/slurm-23.02.2.tar.bz2"
+            dest: "{{ path }}"
+
+#    -   name: install rpm-build  #lol use less
+#        ansible.builtin.dnf:
+#            name: rpm-build
+#            state: present
+#
+#    -   name: copy .rpmmacros
+#        ansible.builtin.copy:
+#            src: ".rpmmacros"
+#            dest: "/root"
+
+    -   name: rpmbuild
+        ansible.builtin.command:
+            cmd: "rpmbuild -ta {{ path }}/slurm-23.02.2.tar.bz2 --without mysql --define '--with-pmix /lib64'" #TODO
+            creates: "~/rpmbuild/RPMS/x86_64/slurm*.rpm"
+        when: not rebuild
+
+    -   name: rebuild rpmbuild
+        ansible.builtin.command:
+            cmd: "rpmbuild -ta {{ path }}/slurm-23.02.2.tar.bz2 --without mysql --define '--with-pmix /lib64'" #TODO
+        when: rebuild
+
+    -   name: rpm install files
+        ansible.builtin.command: "rpm --install /root/rpmbuild/RPMS/x86_64/{{ item }}-23.02.2-1.el9.x86_64.rpm" #installation will be in home of buiding user
+        when: "item | string not in ansible_facts.packages"
+        with_items:
+        -   slurm
+        -   slurm-slurmctld
+        -   slurm-slurmd
+        -   slurm-perlapi
+        -   slurm-pam_slurm
+        -   slurm-libpmi
+        -   slurm-torque
+        -   slurm-devel
+        -   slurm-contribs
+        -   slurm-example-configs
+        -   slurm-openlava
+
+    -   name: rpm reinstall files
+        ansible.builtin.command: "rpm --reinstall /root/rpmbuild/RPMS/x86_64/{{ item }}-23.02.2-1.el9.x86_64.rpm"
+        when:
+        -   "item | string in ansible_facts.packages"
+        -   rebuild
+        with_items:
+        -   slurm
+        -   slurm-slurmctld
+        -   slurm-slurmd
+        -   slurm-perlapi
+        -   slurm-pam_slurm
+        -   slurm-libpmi
+        -   slurm-torque
+        -   slurm-devel
+        -   slurm-contribs
+        -   slurm-example-configs
+        -   slurm-openlava
+
+    when: true

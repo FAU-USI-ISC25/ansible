@@ -1,0 +1,5 @@
+---
+-   name: set hostname to DCHP (rm old)
+    ansible.builtin.file:
+        path: /etc/hostname
+        state: absent

@@ -1,0 +1,14 @@
+---
+-   name: install package
+    ansible.builtin.dnf:
+        name: "{{ package }}"
+        state: present
+    when: package is defined
+
+-   name: install packages
+    ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+    loop: "{{ packages }}"
+    when: packages is defined
+

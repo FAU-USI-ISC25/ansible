@@ -1,0 +1,44 @@
+---
+-   name: setup compute node
+    hosts: com
+
+    roles:
+    -   role: update
+    -   role: enable-repos
+    -   role: enable-firewall-ports
+        vars:
+            service: ssh
+
+    -   role: mount-nfs
+        vars:
+            serverPath: "{{ homeFolder }}"
+            clientPath: "{{ homeFolder }}"
+
+    -   role: folder
+        vars:
+            path: "{{ homeFolder }}"
+            mode: "755"
+
+    -   role: selinux
+        vars:
+            policy: "use_nfs_home_dirs"
+
+    -   role: mount-nfs
+        vars:
+            serverPath: "{{ sharedSoftwarePath }}"
+            clientPath: "{{ sharedSoftwarePath }}"
+
+    -   role: folder
+        vars:
+            path: "{{ sharedSoftwarePath }}"
+            mode: "755"
+
+
+    -   role: create-users-with-tmp-passwd
+
+#-   name: sync users form head to com and repeat automatically
+#    hosts: head
+#
+#    roles:
+#    -   role: start-user-auto-sync
+

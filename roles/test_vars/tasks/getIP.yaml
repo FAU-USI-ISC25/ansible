@@ -1,0 +1,11 @@
+---
+-   name: gather facts for all nodes
+    ansible.builtin.setup:
+    delegate_to: "{{ item }}"
+    delegate_facts: true
+    ignore_unreachable: true
+
+-   name: print IP for node
+    ansible.builtin.debug:
+        msg: "{{ hostvars[item]['ansible_default_ipv4']['address'] }}/{{ hostvars[item]['ansible_default_ipv4']['prefix'] }}"
+    ignore_errors: true

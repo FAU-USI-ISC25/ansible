@@ -1,0 +1,8 @@
+---
+-   name: download tar ball
+    ansible.builtin.unarchive:
+        src: "https://github.com/Unidata/netcdf-c/archive/refs/tags/v{{ version }}.tar.gz"
+        dest: "{{ (installer-tmp-folder, 'netcdf-c') | path_join }}"
+        remote_dest: yes
+
+#TODO

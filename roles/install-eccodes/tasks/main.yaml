@@ -1,0 +1,30 @@
+---
+-   name: download tar ball
+    ansible.builtin.get_url:
+        src: "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-{{ version }}-Source.tar.gz"
+        dest: "{{ (installerTmpFolder, 'eccodes-{{ version }}-Source') | path_join"
+        remote_src: yes
+
+-   name: make build dir
+    ansible.builtin.file:
+        path: "{{ (installerTmpFolder, 'eccodes-{{ version }}-Source', 'build') | path_join }}"
+        state: directory
+
+-   name: cmake
+    ansible.builtin.shell:
+        cmd: "cmake ../eccodes-{{ version }}-Source -DCMAKE_INSTALL_PREFIX={{ shared-software-path, 'eccodes-{{ version }}' }}"
+        chdir: "{{ (installerTmpFolder, 'eccodes-{{ version }}-Source', 'build') | path_join }}"
+
+-   name: make
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, 'eccodes-{{ version }}-Source', 'build') | path_join }}"
+
+-   name: ctest
+    ansible.builtin.shell:
+        cmd: "ctest"
+        chdir: "{{ (installerTmpFolder, 'eccodes-{{ version }}-Source', 'build') | path_join }}"
+
+-   name: make install
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, 'eccodes-{{ version }}-Source', 'build') | path_join }}"
+        target: install

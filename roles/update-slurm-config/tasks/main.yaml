@@ -1,0 +1,11 @@
+---
+-   name: copy slurm.conf to nodes
+    ansible.posix.synchronize:
+        src: /etc/slurm/slurm.conf
+        dest: /etc/slurm/slurm.conf
+    register: newConfig
+    delegate_to: "{{ groups.head[0] }}"
+
+-   name: reload config if it was changed
+    ansible.builtin.command: scontrol reconfigure
+    when: newConfig.changed

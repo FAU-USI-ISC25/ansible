@@ -1,0 +1,47 @@
+---
+-   name: download dependencies for pmix
+    ansible.builtin.dnf:
+        name:
+        -   m4
+        -   autoconf
+        -   automake
+        -   libtool
+        -   flex
+        -   libevent
+        -   git
+        -   hwloc
+        -   hwloc-devel
+        state: present
+
+-   name: download the git repo
+    ansible.builtin.git:
+        repo: 'https://github.com/pmix/pmix'
+        dest: "{{ (installerTmpFolder, 'pmix') | path_join }}"
+        version: "v5.0.3"
+
+-   name: autogen
+    ansible.builtin.shell: ./autogen.pl
+    args:
+        chdir: "{{ (installerTmpFolder, 'pmix') | path_join }}"
+        creates: "{{ (installerTmpFolder, 'pmix', 'configure') | path_join }}"
+
+-   name: create build dir
+    ansible.builtin.file:
+        path: "{{ (installerTmpFolder, 'pmix', 'build') | path_join }}"
+        state: directory
+
+-   name: configure
+    ansible.builtin.shell:
+        cmd: "../configure --prefix={{ path }}"
+        chdir: "{{ (installerTmpFolder, 'pmix', 'build') | path_join }}"
+        creates: "{{ (installerTmpFolder, 'pmix', 'build', 'Makefile') | path_join }}"
+
+-   name: build pmix
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, 'pmix', 'build') | path_join }}"
+        target: all
+
+-   name: install pmix
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, 'pmix', 'build') | path_join }}"
+        target: install

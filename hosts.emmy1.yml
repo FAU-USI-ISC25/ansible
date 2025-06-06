@@ -1,0 +1,49 @@
+all:
+    children:
+        head:
+            hosts:
+                cs3-emmy-11:
+                    sharedSoftwareOriginalPath: "/apps"
+        com:
+            hosts:
+                cs3-emmy-1:
+                    IB_IPaddresses:
+                    -   10.2.1.1
+                    -   10.2.1.2
+                cs3-emmy-11:
+                    IB_IPaddresses:
+                    -   10.2.11.1
+                    -   10.2.11.2
+                cs3-emmy-8:
+                    IB_IPaddresses:
+                    -   10.2.8.1
+                    -   10.2.8.2
+            vars:
+                installerTmpFolder: "/root"
+                sharedSoftwarePath: "/apps"
+        GPU:
+            hosts:
+                cs3-emmy-2:
+                cs3-emmy-8:
+            vars:
+                gpuDriverVersion: "560.35.03"
+    vars:
+        clusterUsers:
+        -   adrian
+        -   jay
+        -   johannes
+        -   melanie
+        -   nils
+        -   onur
+        -   tobias
+        -   faucet
+        homeFolder: "/home"
+        slurmVersion: "24.05.3"
+        openMPIVersion: "4.1.7"
+        IBnetmask: 255.255.0.0 # /16
+        privateSSHkey: "id_faucet" #say no to security because this privateSSHkey gets copyed from your laptop
+        isa: "x86_64"
+        nvhpc_sdk_version: "2024 249 12.6" # Jahr version cuda_version
+        modulefilesFolder: "{{ (sharedSoftwarePath, 'modulefiles') | path_join }}"
+        cuda_version: "12.4.0"
+

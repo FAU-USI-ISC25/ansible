@@ -1,0 +1,9 @@
+---
+-   name: download Offline installer
+    ansible.builtin.get_url:
+        url: "{{ link }}"
+        dest: oneMKL-installer.sh
+        mode: '0700'
+
+-   name: run installer
+#TODO

@@ -1,0 +1,24 @@
+---
+-   name: download libxml2 from github
+    ansible.builtin.git:
+        repo: 'https://github.com/GNOME/libxml2'
+        dest: "{{ installerTmpFolder }}"
+
+-   name: autogen
+    ansible.builtin.shell:
+        cmd: "CFLAGS='-O3' ./autogen.sh --prefix={{ shared-software-path }}"
+        chdir: "{{ (installerTmpFolder, 'libxml2') | path_join }}"
+
+-   name: make
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, 'libxml2') | path_join }}"
+
+-   name: make test
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, 'libxml2') | path_join }}"
+        target: test
+
+-   name: make install
+    community.general.make:
+        chdir: "{{ (installerTmpFolder, 'libxml2') | path_join }}"
+        target: install

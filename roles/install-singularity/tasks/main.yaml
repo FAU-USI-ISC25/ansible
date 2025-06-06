@@ -1,0 +1,12 @@
+---
+-   name: ensure squashfs support
+    ansible.builtin.dnf:
+      name: kernel-modules
+      state: present
+
+-   name: install singularity
+# TODO FIXME this is a highly unsatisfying way of installation, evaluate other possibilities
+    ansible.builtin.yum:
+      name: https://github.com/sylabs/singularity/releases/download/v3.11.4/singularity-ce-3.11.4-1.el9.x86_64.rpm
+      disable_gpg_check: true
+      state: present

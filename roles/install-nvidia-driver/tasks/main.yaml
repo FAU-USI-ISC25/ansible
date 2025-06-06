@@ -1,0 +1,58 @@
+---
+-   name: Install latest driver from nvidia repo
+    block:
+    #https://docs.nvidia.com/datacenter/tesla/pdf/NVIDIA_Driver_Installation_Quickstart.pdf
+    -   name: Install dependencies for drivers # steps 1,2,5
+        ansible.builtin.dnf:
+            name:
+            -   tar
+            -   bzip2
+            -   make
+            -   automake
+            -   gcc
+            -   gcc-c++
+            -   pciutils
+            -   elfutils-libelf-devel
+            -   libglvnd-devel
+            -   epel-release
+            state: present
+
+    -   name: Install packets in special version
+        ansible.builtin.dnf:
+            name:
+            -   "kernel-devel-{{ ansible_kernel }}"
+            -   "kernel-headers-{{ ansible_kernel }}"
+            allow_downgrade: true
+
+    -   name: add cuda repo
+        ansible.builtin.command: #steps 3, 4
+            cmd: dnf config-manager --add-repo http://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64/cuda-rhel9.repo
+
+    -   name: Install nvidia driver module
+        ansible.builtin.dnf:
+            name: "@nvidia-driver:latest-dkms"
+
+    when: gpuDriverVersion == "latest"
+
+-   name: Install nvidia driver in fixed version as .run
+    block:
+    # former legacy Install
+    -   name: download run file
+        ansible.builtin.get_url:
+            url: "https://us.download.nvidia.com/tesla/{{ gpuDriverVersion }}/NVIDIA-Linux-x86_64-{{ gpuDriverVersion }}.run"
+            dest: "{{ installerTmpFolder }}"
+
+    -   name: install gcc and kernel-devel
+        ansible.builtin.dnf:
+            name:
+            -   gcc
+            -   "kernel-devel-{{ ansible_kernel }}"
+            state: present
+
+    -   name: exec run file
+        ansible.builtin.shell:
+            cmd: "sh NVIDIA-Linux-x86_64-{{ gpuDriverVersion }}.run -s"
+            chdir: "{{ installerTmpFolder }}"
+
+    when: gpuDriverVersion != "latest"
+

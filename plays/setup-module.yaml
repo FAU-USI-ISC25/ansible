@@ -1,0 +1,16 @@
+---
+-   name: setup module system
+    hosts: com
+
+    roles:
+      -   role: install-lmod
+
+#-   name: config lmod on head on nfs
+#    hosts: head
+#    roles:
+#      -   role: configure-lmod
+
+-   name: set user env vars for lmod
+    hosts: com
+    roles:
+      -   role: configure-lmod-user-env

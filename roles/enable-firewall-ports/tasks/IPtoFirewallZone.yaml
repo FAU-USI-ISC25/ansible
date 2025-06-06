@@ -1,0 +1,14 @@
+---
+-   name: gather facts for all nodes
+    ansible.builtin.setup:
+    delegate_to: "{{ item }}"
+    delegate_facts: true
+    ignore_unreachable: true
+
+-   name: add nodes to zone
+    ansible.posix.firewalld:
+        source: "{{ hostvars[item]['ansible_default_ipv4']['address'] }}/{{ hostvars[item]['ansible_default_ipv4']['prefix'] }}"
+        zone: "{{ zone }}"
+        state: enabled
+        permanent: true
+    ignore_errors: true

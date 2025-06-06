@@ -1,0 +1,17 @@
+---
+-   name: set iterator to 0
+    ansible.builtin.set_fact:
+        currentIPindex: 0
+
+-   name: ensure the folder for networkscrips is pressent
+    ansible.builtin.file:
+        path: /etc/sysconfig/network-scripts/
+        state: directory
+
+-   name: loop over networkinterfaces
+    ansible.builtin.include_tasks:
+        file: nameInterface.yaml
+        apply:
+            vars:
+                interfaceName: "{{ item }}"
+    with_items: "{{ ansible_facts.interfaces }}"

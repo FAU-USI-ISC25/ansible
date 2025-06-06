@@ -1,0 +1,31 @@
+--- #install from source
+-   name: install cmake for build
+    ansible.builtin.dnf:
+        name: cmake
+        state: present
+
+-   name: make dir for download
+    ansible.builtin.file:
+        path: "{{ downloadPath }}"
+        state: directory
+
+-   name: download the {{ version }} release
+    ansible.builtin.unarchive:
+        src: https://github.com/libevent/libevent/archive/refs/tags/release-{{ version }}-stable.tar.gz
+        dest: "{{ downloadPath }}"
+        remote_src: yes
+
+-   name: make build dir
+    ansible.builtin.file:
+        path: "{{ downloadPath }}/libevent-release-{{ version }}-stable/build"
+        state: directory
+
+-   name: cmake
+    ansible.builtin.shell: cmake ..
+    args:
+        chdir: "{{ downloadPath }}/libevent-release-{{ version }}-stable/build"
+        creates: "{{ downloadPath }}/libevent-release-{{ version }}-stable/build/makefile"
+
+-   name: make
+    community.general.make:
+        chdir: "{{ downloadPath }}/libevent-release-{{ version }}-stable/build"

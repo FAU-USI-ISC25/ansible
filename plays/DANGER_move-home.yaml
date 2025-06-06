@@ -1,0 +1,8 @@
+---
+-   name: move home
+    hosts: head
+
+    roles:
+    -   role: create-users
+        vars:
+            homePath: "/home/users"

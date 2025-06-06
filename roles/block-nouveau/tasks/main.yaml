@@ -1,0 +1,54 @@
+--- #https://access.redhat.com/solutions/41278#rhel8andrhel9only
+-   name: check if nouveau is active
+    ansible.builtin.shell: lsmod
+    register: result
+
+-   name: end play if nouveau is not active and nvidia is
+    ansible.builtin.meta: end_host
+    when: result.stdout.find('nouveau') == -1 and result.stdout.find('nvidia') != -1
+
+-   name: unload nouveau
+    ansible.builtin.shell: modprobe -r nouveau
+
+-   name: create blacklist file
+    ansible.builtin.file:
+        path: /etc/modprobe.d/local-dontload.conf
+        state: touch
+
+-   name: blacklist nouveau
+    ansible.builtin.lineinfile:
+        path: /etc/modprobe.d/local-dontload.conf
+        line: blacklist nouveau
+
+-   name: prevent from being loaded
+    ansible.builtin.lineinfile:
+        path: /etc/modprobe.d/local-dontload.conf
+        line: install nouveau /bin/false
+
+-   name: rebuilt initial ramdisk
+    ansible.builtin.shell: dracut --omit-drivers nouveau -f
+
+-   name: make permanent file
+    ansible.builtin.file:
+        path: /etc/dracut.conf.d/omit-nouveau.conf
+        state: touch
+
+-   name: make permanent
+    ansible.builtin.lineinfile:
+        path: /etc/dracut.conf.d/omit-nouveau.conf
+        line: "omit_dracutmodules+=\" nouveau \""
+
+-   name: add to grub
+    ansible.builtin.shell: "grubby --args \" nouveau.blacklist=1 rd.driver.blacklist=nouveau\" --update-kernel ALL"
+
+-   name: block from initramfs
+    ansible.builtin.shell: "sed -i '/^KDUMP_COMMANDLINE_APPEND=/s/\"$/rd.driver.blacklist=nouveau\"/' /etc/sysconfig/kdump"
+
+-   name: restart kdumpctrl
+    ansible.builtin.shell: kdumpctl restart
+
+-   name: rebuilt kdump initial ramdisk
+    ansible.builtin.shell: mkdumprd -f /boot/initramfs-$(uname -r)kdump.img
+
+-   name: reboot
+    ansible.builtin.reboot:

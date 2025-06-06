@@ -1,0 +1,21 @@
+---
+-   name: set memlock soft to unlimited
+    ansible.builtin.lineinfile:
+        path: /etc/security/limits.conf
+        line: "@rdma soft memlock unlimited"
+
+-   name: set memlock hard to unlimited
+    ansible.builtin.lineinfile:
+        path: /etc/security/limits.conf
+        line: "@rdma hard memlock unlimited"
+
+-   name: create rdma user group
+    ansible.builtin.group:
+        name: rdma
+
+#-   name: add cluster-users to rdma group
+#    ansible.builtin.user:
+#        name: "{{ item }}"
+#        groups: rdma
+#        append: yes
+#    loop: "{{ clusterUsers }}"

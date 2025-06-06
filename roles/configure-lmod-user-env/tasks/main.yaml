@@ -1,0 +1,5 @@
+---
+-   name: set com modulefiles env variable
+    ansible.builtin.copy:
+      dest: /etc/profile.d/mylmodmodulefilesloaderthatdoesntclashwithotherfilenames.sh
+      src: loadlmodmodules.sh

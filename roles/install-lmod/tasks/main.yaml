@@ -1,0 +1,5 @@
+---
+-   name: install lmod
+    ansible.builtin.dnf:
+      name: Lmod
+      state: present

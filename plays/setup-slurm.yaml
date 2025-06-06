@@ -1,0 +1,108 @@
+--- #WARNING nodes must communicate via ssh !!!
+-   name: update
+    hosts: all
+
+    roles:
+    -   role: update
+    -   role: enable-repos
+
+-   name: create users for slurm and munge
+    hosts: all
+
+    roles:
+    -   role: create-slurm-users
+
+-   name: enable firewall for slurm
+    hosts: all
+
+    roles:
+    -   role: enable-firewall-ports
+        vars:
+            ports:
+            -   7012
+            -   7013
+
+-   name: install munge and pmix and ucx for slurm
+    hosts: all
+
+    roles:
+    -   role: install-munge
+    -   role: install-libevent
+    #-   role: install-pmix
+    -   role: install-package #TEST old version (2021) from repo
+        vars:
+            packages:
+            -   pmix
+            -   pmix-devel
+            -   pmix-tools
+            -   autoconf
+            -   automake
+            -   ucx
+            -   ucx-devel
+            -   ucx-ib
+            -   ucx-rdmacm
+            -   ucx-cma
+
+-   name: install slurm on head node
+    hosts: head
+
+    roles:
+    -   role: folder
+        vars:
+            path: "/var/log/slurm"
+            owner: "slurm"
+    -   role: install-slurm
+    -   role: munge-create-key
+    -   role: enable-autostart
+        vars:
+            services:
+            -   munge.service
+-   name: enable inter node ssh
+    hosts: all
+
+    roles:
+    -   role: allow-internode-ssh
+
+-   name: install slurm on com nodes (slurm.rpm form head)
+    hosts: com
+
+    roles:
+    -   role: install-slurm-from-head
+    -   role: munge-key-rollout
+    -   role: enable-autostart
+        vars:
+            services:
+            -   munge.service
+
+-   name: start service head
+    hosts: head
+
+    roles:
+    -   role: enable-autostart
+        vars:
+            services:
+            -   slurmctld
+
+-   name: rollout slurm.conf
+    hosts: all
+
+    roles:
+    -   role: configure-slurm
+
+-   name: start service com
+    hosts: com
+
+    roles:
+    -   role: enable-autostart
+        vars:
+            services:
+            -   slurmd
+
+-   name: enable firewall for srun
+    hosts: all
+
+    roles:
+    -   role: enable-firewall-ports #dam it
+        vars:
+            port: "1023-65535"
+

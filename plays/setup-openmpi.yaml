@@ -1,0 +1,16 @@
+--- # not before installing Slurm!
+-   name: install UCX from repo
+    hosts: all
+
+    roles:
+    -   role: install-package
+        vars:
+            package: ucx-devel
+
+-   name: install openMPI
+    hosts: head
+
+    roles:
+    #-   role: install-openUCX
+    -   role: install-openmpi
+    -   role: openmpi-modulefile

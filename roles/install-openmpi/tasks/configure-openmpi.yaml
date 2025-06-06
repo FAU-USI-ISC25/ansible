@@ -1,0 +1,35 @@
+---
+-   name: set openMPI extended version name with cuda
+    ansible.builtin.set_fact:
+        openMPIExtendedVersionName: "{{ openMPIVersionName }}-cuda{{ cuda_version }}"
+    when: openMPIwithCuda |bool
+
+-   name: set openMPI extended version name without cuda
+    ansible.builtin.set_fact:
+        openMPIExtendedVersionName: "{{ openMPIVersionName }}"
+    when: not openMPIwithCuda |bool
+
+-   name: set openMPI prefix and basic defaults slurm singularity ucx
+    ansible.builtin.set_fact:
+        openMPIConfigure: "--prefix={{ (sharedSoftwarePath, 'openmpi', openMPIExtendedVersionName) | path_join }} --with-slurm --with-singularity --with-ucx"
+
+-   name: set openMPI with PMI
+    ansible.builtin.set_fact:
+        openMPIConfigure: "{{ openMPIConfigure }} --with-pmi"
+    when:
+    -   openMPIwithPMI |bool
+    -   openMPIVersion[0]|int < 5
+
+-   name: set openMPI with PMIx
+    ansible.builtin.set_fact:
+        openMPIConfigure: "{{ openMPIConfigure }} --with-pmix"
+    when: openMPIwithPMIx |bool
+
+-   name: set cuda name
+    ansible.builtin.set_fact:
+        cuda_name: "cuda-{{ cuda_version }}"
+
+-   name: set openMPI with cuda
+    ansible.builtin.set_fact:
+        openMPIConfigure: "{{ openMPIConfigure }} --with-cuda={{ (sharedSoftwarePath, 'cuda', cuda_name) | path_join}}"
+    when: openMPIwithCuda |bool

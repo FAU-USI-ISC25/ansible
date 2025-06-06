@@ -1,0 +1,12 @@
+---
+-   name: unmount old head
+    hosts: all
+
+    roles:
+    -   role: umount-nfs
+        vars:
+            clientPath: "/home/users"
+
+    -   role: umount-nfs
+        vars:
+            clientPath: "/software"

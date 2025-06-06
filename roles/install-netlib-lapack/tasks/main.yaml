@@ -1,0 +1,11 @@
+---
+-   name: #TODO default link is not latest
+    ansible.builtin.unarchive:
+        src: http://www.netlib.org/lapack/lapack.tgz
+        dest: "{{ (installer-tmp-folder, 'lapack') | path_join }}"
+        remote_src: yes
+
+-   name: copy makefile configuration
+    ansible.builtin.copy:
+        src: "{{ (installer-tmp-folder, 'lapack', 'make.inc.example') | path_join }}"
+        dest: "{{ (installer-tmp-folder, 'lapack', 'make.inc') | path_join }}"

@@ -1,0 +1,6 @@
+-   name: install cuda
+    hosts: head
+
+    roles:
+      - role: install-cuda
+      - role: cuda-modulefile

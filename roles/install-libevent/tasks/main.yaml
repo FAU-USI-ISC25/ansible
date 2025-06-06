@@ -1,0 +1,5 @@
+---
+-   name: install libevent-devel
+    ansible.builtin.dnf:
+        name: libevent-devel
+        state: present

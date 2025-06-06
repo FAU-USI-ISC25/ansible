@@ -1,0 +1,14 @@
+users:
+-   name: "uk78ilop"
+    uid: 1000
+    pwhash: "$6$RAlLLu/hxmckXn1S$XidHIgh20aWQPSUtmbj78q5c8pQNQvzfN8zLceBD3/kOBjLEA.jQgG7KXzLIHzPe0GrD1W/e.hwQuWqYeMPqB0"
+-   name: "mi05jelo"
+    uid: 1001
+    pwhash: "$6$XpkITgz/M/dNx1Zc$b6NPps4UUZ./7MDZuRtoqo5CF0Lg3zIDZDRpvOgNKZxsGF7aPycENopSnvpVk3gsc4ROspvcnfWclGrG327p6/"
+-   name: "ev81wotu"
+    uid: 1002
+    pwhash: "$6$buawCkNvv7FxZQ7K$7nt4G8LA7kVdutNa.kAHtBvgXHkGdBYe.9gEVL/r8SKlMLn5EFjkknHyI5lIxN4flTtttw2AM3I43ROTAZek8/"
+-   name: "mo66tufu"
+    uid: 1003
+    pwhash: "!!"
+homePath: "/home/users"

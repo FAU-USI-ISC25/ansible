@@ -1,0 +1,61 @@
+# todo: add file permissions
+---
+-   name: add openMPI modulefile folder
+    ansible.builtin.file:
+        path: /apps/modulefiles/openmpi
+        state: directory
+
+-   name: add openmpi-4.1.6 modulefile
+    ansible.builtin.copy:
+        dest: /apps/modulefiles/openmpi/openmpi-4.1.6.lua
+        src: openmpi-4.1.6.lua
+
+-   name: add nvcc-12.4 modulefile folder
+    ansible.builtin.file:
+        path: /apps/modulefiles/nvcc/
+        state: directory
+
+-   name: add nvcc-12.4 modulefile
+    ansible.builtin.copy:
+        dest: /apps/modulefiles/nvcc/nvcc-12.4.0.550.54.14_linux.lua
+        src: nvcc-12.4.0.550.54.14_linux.lua
+
+#-   name: add oneMKL folder
+#    ansible.builtin.file:
+#        path: /apps/modulefiles/oneMKL
+#        state: directory
+
+#-   name: add oneMKL modulefile
+#    ansible.builtin.copy:
+#       dest: /apps/modulefiles/oneMKL/oneMKL-2024.1.lua
+#        src: oneMKL-2024.1.lua
+
+#-   name: add intelmpi folder
+#    ansible.builtin.file:
+#        path: /apps/modulefiles/intelmpi/
+#        state: directory
+
+#-   name: add intelmpi modulefile
+#    ansible.builtin.copy:
+#        dest: /apps/modulefiles/intelmpi/intelmpi-2021.12.lua
+#        src: intelmpi-2021.12.lua
+
+#-   name: add icc modulefile folder
+#    ansible.builtin.file:
+#        path: /apps/modulefiles/icc/
+#        state: directory
+
+#-   name: add icc modulefile
+#    ansible.builtin.copy:
+#        dest: /apps/modulefiles/icc/icc-2024.1.lua
+#        src: icc-2024.1.lua
+
+-   name: add nvshmem modulefile folder
+    ansible.builtin.file:
+        path: /apps/modulefiles/nvshmem/
+        state: directory
+
+-   name: add nvshmem-2.11.0-5 modulefile
+    ansible.builtin.copy:
+        dest: /apps/modulefiles/nvshmem/nvshmem-2.11.0-5.lua
+        src: nvshmem-2.11.0-5.lua

@@ -1,0 +1,10 @@
+---
+-   name: enable powertools
+    ansible.builtin.command:
+        cmd: "dnf config-manager --set-enabled crb"
+
+-   name: enable epel
+    ansible.builtin.dnf:
+        name: epel-release
+        state: latest
+

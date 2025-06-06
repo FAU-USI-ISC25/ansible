@@ -1,0 +1,31 @@
+---
+-   name: Install nfs-utils
+    ansible.builtin.dnf:
+        name: nfs-utils
+        state: present
+
+-   name: share folder
+    ansible.builtin.lineinfile:
+        path: /etc/exports
+        line: "{{ path }} {{ client }}({{ mode }},sync)"
+    when: client is defined
+
+-   name: share folder for multiple clients
+    ansible.builtin.lineinfile:
+        path: /etc/exports
+        line: "{{ path }} {{ item }}({{ mode }},sync)"
+    loop: "{{ clients }}"
+    when: clients is defined
+
+-   name: share folder for multiple clients
+    ansible.builtin.lineinfile:
+        path: /etc/exports
+        line: "{{ path }} {{ item }}({{ mode }},sync)"
+    with_inventory_hostnames:
+    -   all:!head
+    when: clients is not defined and client is not defined
+
+-   name: Restart NFS-Server
+    ansible.builtin.service:
+        name: nfs-server
+        state: restarted

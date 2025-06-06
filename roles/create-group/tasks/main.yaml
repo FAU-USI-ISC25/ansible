@@ -1,0 +1,7 @@
+---
+-   name: Create group with gid
+    ansible.builtin.group:
+        name: "{{ name }}"
+        state: present
+        gid: "{{ gid }}"
+    become: true

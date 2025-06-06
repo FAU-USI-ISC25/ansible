@@ -1,0 +1,23 @@
+---
+-   name: create dir for save state
+    ansible.builtin.file:
+        path: /var/spool/slurmd
+        state: directory
+        owner: slurm
+        group: slurm
+
+-   name: copy slurm.conf to nodes
+    ansible.builtin.copy:
+        src: slurm.conf
+        dest: /etc/slurm/slurm.conf
+    register: newConfig
+
+-   name: copy topology.conf to nodes
+    ansible.builtin.copy:
+        src: topology.conf
+        dest: /etc/slurm/topology.conf
+
+-   name: reload config if it was changed
+    ansible.builtin.command: scontrol reconfigure
+    when: newConfig.changed
+

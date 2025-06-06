@@ -1,0 +1,23 @@
+---
+-   name: create link
+    ansible.builtin.file:
+        src: "{{src}}"
+        dest: "{{dest}}"
+        state: link
+-   name: Iterate over user dictionary and create with password
+    ansible.builtin.user:
+        name: "{{ item.name }}"
+        uid: "{{ item.uid }}"
+        home: "{{dest}}/{{ item.name }}"
+        create_home: false
+        password: "{{item.pwhash}}"
+    loop: "{{users}}"
+    when: item.pwhash != "!!"
+-   name: Iterate over previously loaded user dictionary and create without password
+    ansible.builtin.user:
+        name: "{{ item.name }}"
+        uid: "{{ item.uid }}"
+        home: "{{dest}}/{{ item.name }}"
+        create_home: false
+    loop: "{{users}}"
+    when: item.pwhash == "!!"

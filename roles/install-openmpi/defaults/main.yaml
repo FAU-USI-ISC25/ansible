@@ -1,0 +1,3 @@
+openMPIwithCuda: yes
+openMPIwithPMI: yes
+openMPIwithPMIx: yes

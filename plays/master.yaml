@@ -1,0 +1,13 @@
+- ansible.bulitin.import_playbook: setup-GPU-driver.yaml
+
+- ansible.builtin.import_playbook: setup-infiniband.yaml
+
+# - ansible.bulitin.import_playbook: setup-module.yaml
+
+- ansible.bulitin.import_playbook: setup-slurm.yaml
+
+- ansible.bulitin.import_playbook: setup-openmpi.yaml
+
+- ansible.bulitin.import_playbook: setup-singularity.yaml
+
+- ansible.bulitin.import_playbook: setup-firewall.yaml

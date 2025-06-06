@@ -1,0 +1,4 @@
+-   name: test
+    hosts: head
+    roles:
+    -   role: install-cuda

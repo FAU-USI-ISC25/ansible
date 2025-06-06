@@ -1,0 +1,44 @@
+---
+-   name: print debug info
+    ansible.builtin.debug:
+        var: ansible_facts['ibp5s0']['ipv4']['network']
+
+-   name: print type
+    ansible.builtin.debug:
+        msg: "{{ ansible_facts['ibp5s0']['ipv4']['network'] | type_debug }}"
+
+-   name: set fact
+    ansible.builtin.set_fact:
+        oneIP: "{{ ['127.0.0.0','10.2.0.0'] }}"
+
+-   name: print type oneIP
+    ansible.builtin.debug:
+        msg: "{{ oneIP | type_debug }}"
+
+-   name: one and live vaule are same
+    ansible.builtin.debug:
+        msg: "{{ ansible_facts['ibp5s0']['ipv4']['network'] not in oneIP }}"
+
+# -   name: testfoobar
+#     ansible.builtin.debug:
+#         msg: "{{ foobar }}"
+
+# -   name: test openMPIwithCuda
+#     ansible.builtin.debug:
+#         msg: "{{ openMPIwithCuda }}"
+#
+# -   name: test bool
+#     ansible.builtin.debug:
+#         msg: "true"
+#     when: openMPIwithCuda |bool
+#
+# -   name: test bool
+#     ansible.builtin.debug:
+#         msg: "false"
+#     when: not openMPIwithCuda |bool
+
+# -   name: get IP addresses for all nodes
+#     ansible.builtin.include_tasks:
+#         file: getIP.yaml
+#     with_inventory_hostnames:
+#     -   all

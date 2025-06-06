@@ -1,0 +1,50 @@
+---
+-   name: setup Head
+    hosts: head
+
+    roles:
+    -   role: update
+
+    -   role: folder
+        vars:
+            path: "{{ homeFolder }}"
+            mode: "755"
+
+    -   role: enable-firewall-ports
+        vars:
+            services:
+            -   "ssh"
+            -   "nfs"
+            -   "rpc-bind"
+            -   "mountd"
+
+    -   role: share-nfs
+        vars:
+            path: "{{ homeFolder }}"
+
+    -   role: folder
+        vars:
+            path: "{{ homeFolder }}"
+            mode: "755"
+
+    -   role: share-nfs
+        vars:
+            path: "{{ sharedSoftwarePath }}"
+
+    -   role: folder
+        vars:
+            path: "{{ sharedSoftwarePath }}"
+            mode: "755"
+
+    -   role: enable-autostart
+        vars:
+            services:
+            -   nfs-server
+
+    -   role: selinux
+        vars:
+            policy: "use_nfs_home_dirs"
+
+    -   role: create-users-with-tmp-passwd
+    -   role: dye-prompt
+    -   role: enable-repos

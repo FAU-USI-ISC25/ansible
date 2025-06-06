@@ -1,0 +1,23 @@
+---
+-   name: Install nfs-utils
+    ansible.builtin.dnf:
+        name: nfs-utils
+        state: present
+
+-   name: Mount nfs
+    ansible.posix.mount:
+        src: "{{ groups.head[0] }}:{{ serverPath }}"
+        path: "{{ clientPath }}"
+        opts: rw,sync
+        state: mounted
+        fstype: nfs
+    when: server is not defined
+
+-   name: Mount nfs
+    ansible.posix.mount:
+        src: "{{ server }}:{{ serverPath }}"
+        path: "{{ clientPath }}"
+        opts: rw,sync
+        state: mounted
+        fstype: nfs
+    when: server is defined
