@@ -1,0 +1,28 @@
+#Management Policies
+ClusterName         = FAUcet
+SlurmctldHost       = cs3-emmy-11
+SlurmUser           = slurm
+SlurmctldPort       = 7012
+SlurmdPort          = 7013
+StateSaveLocation   = /var/spool/slurmd
+AuthType            = auth/munge
+LaunchParameters    = use_interactive_step
+TopologyPlugin      = topology/tree
+
+#logging
+SlurmctldLogFile    = /var/log/slurm/slurmctld.log
+SlurmSchedLogFile   = /var/log/slurm/slurmsched.log
+
+#Node Definitions
+
+NodeName=DEFAULT Sockets=2 CoresPerSocket=10 ThreadsPerCore=1
+NodeName=cs3-emmy-1
+NodeName=cs3-emmy-8
+NodeName=cs3-emmy-11
+
+#
+SrunPortRange=10000-11000
+
+#Partition Definitions
+PartitionName=cpu Nodes="ALL" Default="YES"
+PartitionName=gpu Nodes="hot,cold" Default="YES"
