@@ -2,21 +2,21 @@
 -   name: download Offline installer
     ansible.builtin.get_url:
         url: "{{ oneMKL_download_link }}"
-        dest: "{{ installerTmpFolder }}"
+        dest: "{{ (installerTmpFolder, oneAPI_version_name) | path_join }}"
         mode: '0700'
 
--   name: get installer name from URL usin regex
-    ansible.builtin.set_fact:
-        installer_name: "{{ oneMKL_download_link | regex_search('([^/]+$)') }}"
-
--   name: get version from installer name
-    ansible.builtin.set_fact:
-        oneMKL_version: "{{ installer_name | regex_search('intel-onemkl-(\\d+\\.\\d+\\.\\d+\\.\\d+)_offline.sh') }}"
+# -   name: get installer name from URL usin regex
+#     ansible.builtin.set_fact:
+#         installer_name: "{{ oneMKL_download_link | regex_search('([^/]+$)') }}"
+#
+# -   name: get version from installer name
+#     ansible.builtin.set_fact:
+#         oneMKL_version: "{{ installer_name | regex_search('intel-onemkl-(\\d+\\.\\d+\\.\\d+\\.\\d+)_offline.sh') }}"
 
 -   name: install oneMKL
-    ansible.builtin.command:
-        cmd: "{{ (installerTmpFolder, installer_name) | path_join }} -a --install-dir={{ sharedSoftwarePath }}/intel/oneAPI{{ oneMKL_version }} --eula accept --silent"
-
+    ansible.builtin.shell:
+        cmd: "./{{ oneAPI_version_name }} -a --install-dir={{ (sharedSoftwarePath ,'intel', oneAPI_version_name) | path_join }} --eula accept --silent"
+        chdir: "{{ installerTmpFolder }}"
 
 
 

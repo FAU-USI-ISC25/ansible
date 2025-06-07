@@ -1,2 +1,3 @@
-link: "registrationcenter-download.intel.com/akdlm/IRC_NAS/2f3a5785-1c41-4f65-a2f9-ddf9e0db3ea0/l_onemkl_p_2024.1.0.695_offline.sh"
+link: "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/4a5320d1-0b48-458d-9668-fd0e4501208c/intel-oneapi-base-toolkit-2025.1.3.7_offline.sh"
 path: /apps/oneMKL-2024.1.0
+oneAPI_version_name: "intel-oneapi-base-toolkit-2025.1.3.7" #TODO
