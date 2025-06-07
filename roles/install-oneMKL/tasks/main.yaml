@@ -15,7 +15,7 @@
 
 -   name: install oneMKL
     ansible.builtin.command:
-        cmd: "{{ installerTmpFolder }}/{{ installer_name }} -a --install-dir={{ sharedSoftwarePath }}/intel/oneAPI{{ oneMKL_version }} --eula accept --silent"
+        cmd: "{{ (installerTmpFolder, installer_name) | path_join }} -a --install-dir={{ sharedSoftwarePath }}/intel/oneAPI{{ oneMKL_version }} --eula accept --silent"
 
 
 
