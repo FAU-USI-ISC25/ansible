@@ -1,0 +1,6 @@
+-   name: install spack
+    hosts: head
+    roles:
+    -   role: enable-repos
+    -   role: install-spack
+    #-   role: configure-spack #TODO

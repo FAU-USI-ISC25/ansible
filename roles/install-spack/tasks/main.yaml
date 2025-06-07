@@ -1,0 +1,31 @@
+---
+-   name: install dependentcs for spack
+    ansible.builtin.dnf:
+        name:
+        -   "@Development tools"
+        -   gcc-gfortan
+        -   redhat-lsb-core
+        -   python3
+        -   unzip
+        state: present
+
+-   name: Download spack in fixed version
+    ansible.builtin.unarchive:
+        src: "https://github.com/spack/spack/refs/tags/{{ spackVersion }}.tar.gz"
+        dest: "{{ (sharedSoftwarePath, 'spack', spackVersion) | path_join }}"
+        remote_src: yes
+
+-   name: remove windows and apple stuff
+    ansible.builtin.file:
+        state: absent
+        path: "{{ (sharedSoftwarePath, 'spack', spackVersion, item) | path_join }}"
+    loop:
+    -   "bin/spack.bat"
+    -   "bin/spack.ps1"
+    -   "bin/spack_cmd.bat"
+    -   "bin/spack_pwsh.ps1"
+    -   "haspywin.py"
+    -   "etc/spack/defaults/windows"
+    -   "etc/spack/defaults/darwin"
+    -   "share/spack/setup-env.bat"
+    -   "share/spack/setup-env.ps1"
