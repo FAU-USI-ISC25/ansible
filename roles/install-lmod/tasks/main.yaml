@@ -1,5 +1,16 @@
 ---
+-   name: unistall environment-modules
+    ansible.builtin.dnf:
+        name: environment-modules
+        state: absent
+
+-   name: prevent environment-modules from being installed
+    ansible.builtin.lineinfile:
+        path: /etc/dnf/dnf.conf
+        line: "exclude=environment-modules"
+
 -   name: install lmod
     ansible.builtin.dnf:
       name: Lmod
       state: present
+
