@@ -14,15 +14,16 @@
         path: "{{ (sharedSoftwarePath, 'spack') | path_join }}"
         state: directory
 
+-   name: set spackVersionName (spack-<version>)
+    ansible.builtin.set_fact:
+        spackVersionName: "spack-{{ spackVersion }}"
+
 -   name: Download spack in fixed version
     ansible.builtin.unarchive:
         src: "https://github.com/spack/spack/archive/refs/tags/v{{ spackVersion }}.tar.gz"
         dest: "{{ (sharedSoftwarePath, 'spack') | path_join }}"
         remote_src: yes
-
--   name: set spackVersionName (spack-<version>)
-    ansible.builtin.set_fact:
-        spackVersionName: "spack-{{ spackVersion }}"
+        creates: "{{ (sharedSoftwarePath, 'spack', spackVersionName) | path_join }}"
 
 -   name: remove windows and apple stuff
     ansible.builtin.file:

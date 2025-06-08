@@ -1,0 +1,29 @@
+---
+-   name: set spackVersionName (spack-<version>)
+    ansible.builtin.set_fact:
+        spackVersionName: "spack-{{ spackVersion }}"
+
+-   name: configure spack for user specifig folder
+    ansible.builtin.template:
+        src: config.yaml.j2
+        dest: "{{ ( sharedSoftwarePath, 'spack' , spackVersionName, 'etc/spack/config.yaml' ) | path_join }}"
+
+-   name: set permisions for all to cache directory
+    ansible.builtin.file:
+        path: "{{ (sharedSoftwarePath, 'spack', spackVersionName, 'var/spack/cache') | path_join }}"
+        state: directory
+        mode: '0777'
+
+-   name: create directory for user-spack
+    ansible.builtin.file:
+        path: "{{ (sharedSoftwarePath, 'spack', spackVersionName, 'opt/user-spack' ) | path_join }}"
+        state: directory
+        mode: '0755'
+
+    ansible.builtin.file:
+        path: "{{ (sharedSoftwarePath, 'spack', spackVersionName, 'opt/user-spack', item ) | path_join }}"
+        state: directory
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: '0755' #directory
+    loop: "{{ clusterUsers }}"
