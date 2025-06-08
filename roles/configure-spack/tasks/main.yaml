@@ -8,6 +8,11 @@
         src: config.yaml.j2
         dest: "{{ ( sharedSoftwarePath, 'spack' , spackVersionName, 'etc/spack/config.yaml' ) | path_join }}"
 
+-   name: configure spack for user specifig folder
+    ansible.builtin.template:
+        src: modules.yaml.j2
+        dest: "{{ ( sharedSoftwarePath, 'spack' , spackVersionName, 'etc/spack/modules.yaml' ) | path_join }}"
+
 -   name: set permisions for all to cache directory
     ansible.builtin.file:
         path: "{{ (sharedSoftwarePath, 'spack', spackVersionName, 'var/spack/cache') | path_join }}"

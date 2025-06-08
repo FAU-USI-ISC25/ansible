@@ -1,0 +1,24 @@
+modules:
+    default:
+        roots:
+            lmod: {{ sharedSoftwarePath }}/spack/{{ spackVersionName }}/opt/user-spack/$user/lmod
+        enable: [lmod]
+        lmod:
+            hash_length: 10
+            hide_implicits: true
+            all:
+                environment:
+                    set:
+                        "{name}_ROOT": "{prefix}"
+                #TODO dose not work
+                #conflict:
+                #-   '{name}'
+            hierarchy:
+            -   'mpi'
+            -   'lapack'
+            -   'scalapack'
+            -   'blas'
+            binutils::
+                environment:
+                    set:
+                        "{name}_ALTROOT": "{prefix}" #confict with gcc

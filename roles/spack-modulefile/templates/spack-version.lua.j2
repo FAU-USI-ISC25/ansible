@@ -6,3 +6,7 @@ whatis("Name: "..myModuleName())
 whatis("Version: "..myModuleVersion())
 
 execute{cmd = ". "..pathJoin(base, "share/spack/setup-env.sh"), modeA={"load"}}
+
+if ( "unload" == mode()) then LmodWarning("spack can not be unload") end
+
+prepend_path("MODULEPATH", pathJoin(base, "opt/user-spack", os.getenv("USER"), "lmod"))
