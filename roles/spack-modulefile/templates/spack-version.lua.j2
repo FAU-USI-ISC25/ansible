@@ -1,0 +1,8 @@
+local base = pathJoin("{{ spackAbsolutePath }}", "spack-" ..myModuleVersion())
+
+family("spack")
+
+whatis("Name: "..myModuleName())
+whatis("Version: "..myModuleVersion())
+
+execute{cmd = ". "..pathJoin(base, "share/spack/setup-env.sh"), modeA={"load"}}

@@ -1,0 +1,18 @@
+---
+-   name: set absolute path for Spack modulefile #path_join dose not work in template
+    ansible.builtin.set_fact:
+        spackAbsolutePath: "{{ ( sharedSoftwarePath, 'spack') | path_join }}" #without version because modulefile will handle that
+
+-   name: create folder for spack modulefiles
+    ansible.builtin.file:
+        path: "{{ ( modulefilesFolder, 'spack') | path_join }}"
+        state: directory
+
+-   name: set versionname with .lua
+    ansible.builtin.set_fact:
+        spackVersion_lua: "{{ spackVersion }}.lua"
+
+-   name: deploy modulefile to load spack
+    ansible.builtin.template:
+        src: spack-version.lua.j2
+        dest: "{{ ( modulefilesFolder, 'spack', spackVersion_lua) | path_join }}"

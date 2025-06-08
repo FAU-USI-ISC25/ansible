@@ -1,6 +1,6 @@
 ---
 -   name: setup module system
-    hosts: com
+    hosts: com,head
 
     roles:
       -   role: install-lmod
@@ -11,6 +11,6 @@
 #      -   role: configure-lmod
 
 -   name: set user env vars for lmod
-    hosts: com
+    hosts: com,head
     roles:
       -   role: configure-lmod-user-env

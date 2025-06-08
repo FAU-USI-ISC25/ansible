@@ -3,4 +3,5 @@
     roles:
     -   role: enable-repos
     -   role: install-spack
-    #-   role: configure-spack #TODO
+    #TODO -   role: configure-spack
+    -   role: spack-modulefile
